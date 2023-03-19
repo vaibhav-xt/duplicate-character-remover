@@ -6,24 +6,27 @@ export default function Screen_1() {
     const [input, setInput] = useState("")
     const navigate = useNavigate();
 
-    const Submit = () => {
-        // e.preventDefault();
+    const Submit = (e) => {
+        e.preventDefault();
         if (input.replace(/\s/g, '') === "") {
             alert("Please Provide Non-Empty Value");
         }
         else {
-            navigate.push('screen_2');
+            navigate('/screen_2', { state: { data: input } })
         }
     }
 
     return (
-        <form className='vh-100 w-100 bg-light d-flex flex-column justify-content-center align-items-center gap-2' onSubmit={Submit}>
-            <h2>Screen 1</h2>
-            {/* <p>Enter a string:</p> */}
-            <input type="text" value={input} className='' placeholder='Enter a string' onChange={(event) => {
-                setInput(event.target.value)
-            }} />
-            <button type='submit' className='btn btn-success'>Submit</button>
-        </form>
+        <main className='bg-light vh-100 w-100'>
+            <h1 className='w-100 text-center p-3 bg-info'>Duplicate Character Remover</h1>
+            <form className='d-flex flex-column justify-content-center align-items-center gap-2' onSubmit={Submit}>
+                <h2>Screen 1</h2>
+                <p>Enter a string:</p>
+                <input type="text" value={input} className='' onChange={(event) => {
+                    setInput(event.target.value)
+                }} />
+                <button type='submit' className='btn btn-success'>Submit</button>
+            </form>
+        </main>
     )
 }

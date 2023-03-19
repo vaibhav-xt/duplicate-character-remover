@@ -10,6 +10,7 @@ function App() {
         <Routes>
           <Route path='/' Component={Screen_1} />
           <Route path='/screen_2' Component={Screen_2} />
+          <Route path='*' Component={Screen_1} />
         </Routes>
       </Router>
     </div>
