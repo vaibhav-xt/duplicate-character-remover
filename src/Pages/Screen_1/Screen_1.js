@@ -10,6 +10,8 @@ export default function Screen_1() {
         e.preventDefault();
         if (input.replace(/\s/g, '') === "") {
             alert("Please Provide Non-Empty Value");
+        } else if (input.length >= 27) {
+            alert("Please insert characters less than 27")
         }
         else {
             navigate('/screen_2', { state: { data: input } })
