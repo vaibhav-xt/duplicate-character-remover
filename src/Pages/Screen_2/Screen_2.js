@@ -1,6 +1,7 @@
 import React from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { useState } from 'react';
+import { computeHeadingLevel } from '@testing-library/react';
 
 export default function Screen_2() {
 
@@ -47,14 +48,11 @@ export default function Screen_2() {
     }
 
 
+    console.log("before", arr_string);
     function cardsUpdateRemove(key) {
         const value = arr_string[key].character;
-        let cloneArr = arr_string;
-        console.log(arr_string)
-        console.log(cloneArr)
         let newArr = [];
-        // try {
-        for (let i = 0; i < cloneArr.length; i++) {
+        for (let i = 0; i < arr_string.length; i++) {
             if (arr_string[i].character === value) {
                 if (key === i) {
                     newArr[i] = arr_string[i];
@@ -63,15 +61,15 @@ export default function Screen_2() {
             else if (arr_string[i].character !== value) {
                 newArr[i] = arr_string[i];
             }
+            else {
+                alert("No Duplicate Exist.")
+            }
         }
-        // }
-        // catch {
-        //     alert("No duplicates exist")
-        // }
-        arr_string.length = 0;
-        setArr_string(newArr)
+        let temp = []
+        newArr.map((char) => temp.push(char))
+        console.log("after", temp)
+        setArr_string(temp)
     }
-    console.log(arr_string)
 
     return (
         <div className='min-vh-100 w-100 bg-light d-flex flex-column justify-content-center align-items-center gap-2 p-3'>
