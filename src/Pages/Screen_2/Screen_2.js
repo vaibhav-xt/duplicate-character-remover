@@ -6,6 +6,8 @@ export default function Screen_2() {
 
     const location = useLocation();
     const string = location.state.data;
+    let successFlag = false;
+    // const [successFlag, setSuccessFlag] = useState(false);
 
     // Duplicate character removed from the string to achieve the background color for character if we not do the same characeter get different colors  
     function duplicateRemover(string) {
@@ -20,7 +22,7 @@ export default function Screen_2() {
     const characters = duplicateRemover(string.replace(/\s/g, ""));
 
     // colors for different character 
-    const colors = ["#FF8066", "#62AEC5", "#ffc3d7", "#f2e3c6 ", "#17e364", "#F9F871", "#2D997C", "#4D9AB2", "#FFC300", "#CCBBBB", "#F5FFC6", "#C2EBD0", "#CCBBBB", "#FBEAFF", "#F3C5FF", "#787EF4", "#B27DD4", "#00C9A7", "#ADC5CF", "#4FFBDF", "#B0A8B9", "#009EFA", "#DEB2FF", "#FEFEDF", "#D07E71", "#F4E5DD", "#C70039"];
+    const colors = ["#FF8066", "#62AEC5", "#ffc3d7", "#f2e3c6 ", "#17e364", "#F9F871", "#2D997C", "#C678DD", "#FFC300", "#CCBBBB", "#F5FFC6", "#C2EBD0", "#CCBBBB", "#FBEAFF", "#F3C5FF", "#787EF4", "#B27DD4", "#00C9A7", "#ADC5CF", "#4FFBDF", "#B0A8B9", "#009EFA", "#DEB2FF", "#FEFEDF", "#D07E71", "#F4E5DD", "#C70039"];
 
     // created an object of array with the character an color
     // example: characterColors = [{
@@ -45,35 +47,31 @@ export default function Screen_2() {
         }
     }
 
-    let successFlag = false;
-    let same = "";
+    let same = ""; //Resultant String
     for (let char of arr_string) {
         same += char.character;
     }
 
-    if (same === characters) {
+    //Cheecking the resultant string
+    if (same.length === characters.length) {
         successFlag = true;
     }
 
 
     function cardsUpdateRemove(key) {
-
-        // Checking Character are more than one 
-        let counter = 0;
-        let string = "";
+        let counter = 0; // Checking Character are more than one 
+        let newString = "";
         for (let char of arr_string) {
             if (char.character === arr_string[key].character) {
                 counter += 1;
             }
-            string += char.character;
+            newString += char.character;
         }
-        console.log(characters, string)
 
         const value = arr_string[key].character;
         let newArr = [];
 
-        // console.log(string, counter)
-        if (characters !== string) {
+        if (characters.length !== newString.length) {
             if (counter > 1) {
                 for (let i = 0; i < arr_string.length; i++) {
                     if (arr_string[i].character === value) {
@@ -90,7 +88,6 @@ export default function Screen_2() {
                 }
                 let temp = []
                 newArr.map((char) => temp.push(char))
-                console.log("after", temp)
                 setArr_string(temp)
             } else {
                 alert(`${arr_string[key].character} has no duplicates.`)
@@ -102,17 +99,23 @@ export default function Screen_2() {
     }
 
     return (
-        <div className='min-vh-100 w-100 bg-light d-flex flex-column justify-content-center align-items-center gap-2 p-3'>
+        <div className='min-vh-100 w-100 bg-light d-flex flex-column justify-content-center align-items-center gap-2'>
             {
-                successFlag && <div className="alert alert-success" role="alert">
-                    Success! All duplicates are removed.
+                successFlag && <div className="alert alert-success w-100 text-center" role="alert">
+                    <span className='fw-bold'>Success!</span> All duplicates are removed.
                 </div>
             }
             <Link className='btn btn-danger my-4 fs-3' to='/'>Back</Link>
             <div className='d-flex gap-3'>
                 <span className='fs-2 fw-bold text-primary'>Original String:</span>
-                <span className='fs-2'>{location.state.data}</span>
+                <span className='fs-2'>{string}</span>
             </div>
+            {
+                successFlag && <div className="d-flex gap-3">
+                    <span className='fs-2 fw-bold text-success'>Result String:</span>
+                    <span className='fs-2'>{same}</span>
+                </div>
+            }
             <div className='gap-2 w-75'>
                 <div className="row my-5 d-flex justify-content-center align-items-center gap-2">
                     {/* Cards Generated  */}
@@ -122,8 +125,8 @@ export default function Screen_2() {
                             "background": char.color,
                             "minWidth": "10rem"
                         }}>
-                            {char.character}
-                            {/* <p className='fs-6'>{char.color}</p> */}
+                            <p>{char.character}</p>
+                            {/* <p>{char.color}</p> */}
                             <i role="button" className="fa-solid fa-trash" onClick={(event) => {
                                 const parentDiv = event.target.closest('div');
                                 const parentKey = parentDiv.getAttribute('id');
