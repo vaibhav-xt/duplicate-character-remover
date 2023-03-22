@@ -1,7 +1,6 @@
 import React from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { useState } from 'react';
-import { computeHeadingLevel } from '@testing-library/react';
 
 export default function Screen_2() {
 
@@ -19,7 +18,6 @@ export default function Screen_2() {
         return newStr;
     }
     const characters = duplicateRemover(string.replace(/\s/g, ""));
-    // console.log(characters)
 
     // colors for different character 
     const colors = ["#FF8066", "#62AEC5", "#ffc3d7", "#f2e3c6 ", "#17e364", "#F9F871", "#2D997C", "#4D9AB2", "#FFC300", "#CCBBBB", "#F5FFC6", "#C2EBD0", "#CCBBBB", "#FBEAFF", "#F3C5FF", "#787EF4", "#B27DD4", "#00C9A7", "#ADC5CF", "#4FFBDF", "#B0A8B9", "#009EFA", "#DEB2FF", "#FEFEDF", "#D07E71", "#F4E5DD", "#C70039"];
@@ -47,32 +45,69 @@ export default function Screen_2() {
         }
     }
 
+    let successFlag = false;
+    let same = "";
+    for (let char of arr_string) {
+        same += char.character;
+    }
 
-    console.log("before", arr_string);
+    if (same === characters) {
+        successFlag = true;
+    }
+
+
     function cardsUpdateRemove(key) {
+
+        // Checking Character are more than one 
+        let counter = 0;
+        let string = "";
+        for (let char of arr_string) {
+            if (char.character === arr_string[key].character) {
+                counter += 1;
+            }
+            string += char.character;
+        }
+        console.log(characters, string)
+
         const value = arr_string[key].character;
         let newArr = [];
-        for (let i = 0; i < arr_string.length; i++) {
-            if (arr_string[i].character === value) {
-                if (key === i) {
-                    newArr[i] = arr_string[i];
+
+        // console.log(string, counter)
+        if (characters !== string) {
+            if (counter > 1) {
+                for (let i = 0; i < arr_string.length; i++) {
+                    if (arr_string[i].character === value) {
+                        if (key === i) {
+                            newArr[i] = arr_string[i];
+                        }
+                    }
+                    else if (arr_string[i].character !== value) {
+                        newArr[i] = arr_string[i];
+                    }
+                    else {
+                        alert("No Duplicate Exist.")
+                    }
                 }
+                let temp = []
+                newArr.map((char) => temp.push(char))
+                console.log("after", temp)
+                setArr_string(temp)
+            } else {
+                alert(`${arr_string[key].character} has no duplicates.`)
             }
-            else if (arr_string[i].character !== value) {
-                newArr[i] = arr_string[i];
-            }
-            else {
-                alert("No Duplicate Exist.")
-            }
+
+        } else {
+            alert("All duplicates are removed!")
         }
-        let temp = []
-        newArr.map((char) => temp.push(char))
-        console.log("after", temp)
-        setArr_string(temp)
     }
 
     return (
         <div className='min-vh-100 w-100 bg-light d-flex flex-column justify-content-center align-items-center gap-2 p-3'>
+            {
+                successFlag && <div className="alert alert-success" role="alert">
+                    Success! All duplicates are removed.
+                </div>
+            }
             <Link className='btn btn-danger my-4 fs-3' to='/'>Back</Link>
             <div className='d-flex gap-3'>
                 <span className='fs-2 fw-bold text-primary'>Original String:</span>
@@ -80,7 +115,6 @@ export default function Screen_2() {
             </div>
             <div className='gap-2 w-75'>
                 <div className="row my-5 d-flex justify-content-center align-items-center gap-2">
-
                     {/* Cards Generated  */}
                     {arr_string.map((char, index) => {
 
@@ -93,8 +127,6 @@ export default function Screen_2() {
                             <i role="button" className="fa-solid fa-trash" onClick={(event) => {
                                 const parentDiv = event.target.closest('div');
                                 const parentKey = parentDiv.getAttribute('id');
-                                // const value = parentDiv.innerText
-                                // console.log(parentKey);
                                 cardsUpdateRemove(parseInt(parentKey));
 
                             }}></i>
